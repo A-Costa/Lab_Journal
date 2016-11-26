@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block active_new %}
+class="active"
+{% endblock %}
+
+{% block head %}
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+tinymce.init({
+    selector: 'textarea',
+    height: 300,
+    plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table contextmenu paste code codesample'
+    ],
+    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | codesample',
+    content_css: '//www.tinymce.com/css/codepen.min.css'
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="nuova_nota">
+    <form class="form-horizontal" method="POST">
+        {{ nota_form.csrf_token }}
+        <div class="form-group">
+            <label for="titolo" class="col-xs-2 control-label">Titolo:</label>
+            <div class="col-xs-10">
+            {{ nota_form.titolo(class_="form-control") }}
+            {% if errors.titolo %}
+                <div class="errore">
+                    {{ errors.titolo[0] }}
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12">
+            {{ nota_form.testo(class="form-control") }}
+            </div>
+        </div>
+        <div class="text-right">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

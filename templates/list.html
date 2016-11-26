@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block active_home %}
+class="active"
+{% endblock %}
+
+
+{% block body %}
+<div class="lista_note">
+    <div class="col-sm-12 tab">
+        <table class="table table-striped table-hover table-condensed">
+            <tr>
+                <th>Titolo Nota</th>
+                <th>Data Pubblicazione</th>
+            </tr>
+            {% for nota in note %}
+            <tr class="clickable-row" data-href='/nota/{{ nota.id }}'>
+                <td>{{ nota.titolo }}</td>
+                <td>{{ nota.data.strftime("%d %b %Y") }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

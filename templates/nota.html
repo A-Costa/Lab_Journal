@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href={{ url_for('static', filename='css/prism.css') }} rel="stylesheet">
+<script src={{ url_for('static', filename='js/prism.js') }}></script>
+{% endblock %}
+
+{% block body %}
+<div class="dettagli_nota">
+    <div class="col-sm-12">
+        <h3>{{ nota.titolo }}</h3>
+        <p> {{ nota.testo|safe }}</p>
+    </div>
+</div>
+<div class="bottoni">
+    <div class="col-sm-12">
+        <a href='/modify/{{ nota.id }}' class="btn btn-default">Modify</a>
+    </div>
+</div>
+{% endblock %}

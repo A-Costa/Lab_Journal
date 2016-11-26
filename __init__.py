@@ -7,4 +7,6 @@ app.config.from_pyfile('config.py', silent=True)
 db = SQLAlchemy(app)
 
 from Lab_Journal import views
+from Lab_Journal import models
 
+db.create_all()

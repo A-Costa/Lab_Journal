@@ -22,7 +22,7 @@ class Nota(db.Model):
 
 class Categoria(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(64))
+    tag = db.Column(db.String(64), nullable=False)
 
     def __init__(self, tag):
         self.tag = tag
