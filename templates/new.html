@@ -41,9 +41,30 @@ tinymce.init({
             {{ nota_form.testo(class="form-control") }}
             </div>
         </div>
+        <div class="form-group">
+            <div class="col-xs-12">
+            {{ nota_form.tags(class_="form-control selectmultiple") }}
+            {% if errors.tags %}
+                <div class="errore">
+                    {{ errors.tags[0] }}
+                </div>
+            {% endif %}
+            </div>
+        </div>
         <div class="text-right">
             <button type="submit" class="btn btn-default">Submit</button>
         </div>
     </form>
+
 </div>
+{% endblock %}
+{% block script %}
+<script>
+$('.selectmultiple').select2({
+    theme: 'bootstrap',
+    width: '100%',
+    placeholder: 'Tags',
+    tags: true
+});
+</script>
 {% endblock %}

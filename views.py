@@ -1,5 +1,5 @@
 from Lab_Journal import app, db
-from Lab_Journal.models import Nota, Nota_Form
+from Lab_Journal.models import Nota, Categoria  , Nota_Form
 from flask import render_template, request, redirect
 import datetime
 
@@ -16,7 +16,17 @@ def nota(id_nota):
 @app.route('/new', methods=['GET', 'POST'])
 def new():
     nota_form = Nota_Form()
+    #la prossima funzione setta dinamicamente le possibili scelte del campo tags (che e' un campo "SelectMultipleField")
+    #in base ai valori presenti nel database
+    nota_form.tags.choices = [(c.tag, c.tag) for c in Categoria.query.order_by(Categoria.tag).all()]
     if nota_form.validate_on_submit():
+        categorie_db = [c.tag for c in Categoria.query.all()]
+        categorie_ricevute = nota_form.tags.data
+        categorie_nuove = set(categorie_ricevute)-set(categorie_db)
+        for c in categorie_nuove:
+            new = Categoria(c)
+            db.session.add(new)
+            db.session.commit()
         n = Nota(nota_form.titolo.data, datetime.date.today(), nota_form.testo.data)
         db.session.add(n)
         db.session.commit()

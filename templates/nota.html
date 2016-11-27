@@ -6,13 +6,13 @@
 {% endblock %}
 
 {% block body %}
-<div class="dettagli_nota">
+<div class="row dettagli_nota">
     <div class="col-sm-12">
         <h3>{{ nota.titolo }}</h3>
         <p> {{ nota.testo|safe }}</p>
     </div>
 </div>
-<div class="bottoni">
+<div class="row bottoni">
     <div class="col-sm-12">
         <a href='/modify/{{ nota.id }}' class="btn btn-default">Modify</a>
     </div>

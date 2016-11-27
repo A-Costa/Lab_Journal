@@ -7,6 +7,8 @@
     <title>Lab Journal</title>
     <!-- Bootstrap -->
     <link href={{ url_for('static', filename='css/bootstrap.min.css') }} rel="stylesheet">
+    <link href={{ url_for('static', filename='css/select2.min.css') }} rel="stylesheet">
+    <link href={{ url_for('static', filename='css/select2-bootstrap.min.css') }} rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,10 +42,7 @@
     tr.clickable-row{
         cursor: pointer;
     }
-    .lista_note .tab{
-        padding-left: 0px;
-        padding-right:0px;
-    }
+
     .dettagli_nota h3{
         margin-top: 0px;
         margin-bottom: 40px;
@@ -59,6 +58,12 @@
     .errore {
         padding-top: 10px;
         color: red;
+    }
+    .bottoni{
+        margin-top:20px;
+    }
+    .bootstrap-tagsinput {
+        width: 100% !important;
     }
     </style>
 </head>
@@ -89,6 +94,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src={{ url_for('static', filename='js/bootstrap.min.js')}}></script>
+    <script src={{ url_for('static', filename='js/select2.min.js')}}></script>
     <script>
     jQuery(document).ready(function($) {
         $(".clickable-row").click(function() {
@@ -96,5 +102,8 @@
         });
     });
     </script>
+    {% block script %}
+    {% endblock %}
+
 </body>
 </html>
