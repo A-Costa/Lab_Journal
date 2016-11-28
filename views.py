@@ -28,6 +28,9 @@ def new():
             db.session.add(new)
             db.session.commit()
         n = Nota(nota_form.titolo.data, datetime.date.today(), nota_form.testo.data)
+        for c in categorie_ricevute:
+            categoria = Categoria.query.filter(Categoria.tag == c).first()
+            n.categorie.append(categoria)
         db.session.add(n)
         db.session.commit()
         return redirect('/nota/'+ str(n.id))
