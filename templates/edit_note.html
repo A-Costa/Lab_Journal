@@ -6,25 +6,9 @@
     {% endif %}
 {% endblock %}
 
-{% block head %}
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-<script>
-tinymce.init({
-    selector: 'textarea',
-    height: 300,
-    plugins: [
-        'advlist autolink lists link image charmap print preview anchor',
-        'searchreplace visualblocks code fullscreen',
-        'insertdatetime media contextmenu paste code codesample'
-    ],
-    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | codesample',
-    content_css: '//www.tinymce.com/css/codepen.min.css'
-});
-</script>
-{% endblock %}
 
 {% block body %}
-<div class="nuova_nota">
+<div class="nuova_nota" style="display:none;">
     <form class="form-horizontal" method="POST">
         {{ nota_form.csrf_token }}
         <div class="form-group">
@@ -56,7 +40,20 @@ tinymce.init({
         <div class="row bottoni">
             <div class="col-xs-6">
                 {% if (modify==True) %}
-                    <button type="" class="btn btn-default" form="form_delete">Delete</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete_modal">Delete</button>
+                <div class="modal fade" id=delete_modal tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class ="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Are you sure?</h4>
+                            </div>
+                            <div class="modal-body text-center">
+                                <button type="" class="btn btn-danger" form="form_delete">Confirm</button>
+                            </div>
+                        </div>
+                  </div>
+                </div>
                 {% endif %}
             </div>
             <div class="col-xs-6 text-right">
@@ -74,6 +71,20 @@ tinymce.init({
 
 {% endblock %}
 {% block script %}
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+tinymce.init({
+    selector: 'textarea',
+    height: 300,
+    plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media contextmenu paste code codesample'
+    ],
+    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | codesample',
+    content_css: '//www.tinymce.com/css/codepen.min.css'
+});
+</script>
 <script>
 $('.selectmultiple').select2({
     theme: 'bootstrap',
@@ -81,5 +92,18 @@ $('.selectmultiple').select2({
     placeholder: 'Tags',
     tags: true
 });
+
+//funzione di fadeIn, eseguita alla fine del caricamento della pagina.
+//serve ad evitare che la pagina venga renderizzata prima dell'esecuzione degli script che attivano select2 e tinymce
+$(document).ready( function() {
+
+    /*
+     * ... all of your jQuery ...
+     */
+
+    // At the bottom of your jQuery code, put this:
+    $('.nuova_nota').fadeIn();
+});
+
 </script>
 {% endblock %}
