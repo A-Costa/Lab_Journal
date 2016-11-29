@@ -37,12 +37,5 @@ $('.selectmultiple').select2({
     placeholder: 'Nessun Tag',
     tags: true
 });
-
-//funzione di fadeIn, eseguita alla fine del caricamento della pagina.
-//serve ad evitare che la pagina venga renderizzata prima dell'esecuzione degli script che attivano select2 e tinymce
-$(document).ready( function() {
-    $('.nuova_nota').fadeIn();
-});
-
 </script>
 {% endblock %}

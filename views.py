@@ -1,5 +1,5 @@
 from Lab_Journal import app, db
-from Lab_Journal.models import Nota, Categoria, Nota_Form, Delete_Form
+from Lab_Journal.models import Nota, Categoria, Nota_Form, Delete_Form, Search_Form
 from flask import render_template, request, redirect
 import datetime
 import code
@@ -86,3 +86,18 @@ def modify(id_nota):
 
         delete_form.id.data = id_nota
         return render_template('edit_note.html', nota_form = nota_form, errors = nota_form.errors, modify=True, delete_form = delete_form)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    search_form=Search_Form()
+    search_form.tags.choices = [(c.tag, c.tag) for c in Categoria.query.order_by(Categoria.tag).all()]
+
+    if search_form.validate_on_submit():
+        categorie_ricevute = search_form.tags.data
+        print categorie_ricevute
+        note = []
+        for c in categorie_ricevute:
+            note += [n for n in Categoria.query.filter(Categoria.tag == c).first().note.all() if n not in note]
+        note =  sorted(note, key=lambda d: d.data)
+        return render_template('list.html', note=note)
+    return render_template('search.html', search_form=search_form)

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block active_search %}
+class="active"
+{% endblock %}
+
+{% block body %}
+<div class="ricerca_tag">
+    <form class="form-horizontal" method="POST">
+        {{ search_form.csrf_token }}
+        <div class="form-group">
+            <div class="col-xs-12">
+            {{ search_form.tags(class_="form-control selectmultiple") }}
+            </div>
+        </div>
+        <div class="row bottoni">
+            <div class="col-xs-12 text-right">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+$('.selectmultiple').select2({
+    theme: 'bootstrap',
+    width: '100%',
+    placeholder: 'Tags',
+});
+</script>
+{% endblock %}

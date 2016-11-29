@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectMultipleField, HiddenField
 from wtforms.validators import DataRequired, Length
 import re
+import code
 
 # >>> DATABASE DECLARATION <<<
 
@@ -61,3 +62,6 @@ class Nota_Form(FlaskForm):
 
 class Delete_Form(FlaskForm):
     id = HiddenField('id')
+
+class Search_Form(FlaskForm):
+    tags = TagsSelectMultipleField('tags', validators=[DataRequired()])
