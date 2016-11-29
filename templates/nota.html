@@ -13,9 +13,36 @@
     </div>
 </div>
 <hr/>
+<div class="row categorie">
+    <div class="col-xs-12">
+        <span>Tags: </span>
+            {% for tag in tags[:-1] %}
+            <span>#{{ tag }}, </span>
+            {% endfor %}
+            <span>#{{ tags[-1] }}</span>
+    </div>
+</div>
 <div class="row bottoni">
     <div class="col-sm-12">
         <a href='/modify/{{ nota.id }}' class="btn btn-default">Modify</a>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+$('.selectmultiple').select2({
+    theme: 'bootstrap',
+    width: '100%',
+    placeholder: 'Nessun Tag',
+    tags: true
+});
+
+//funzione di fadeIn, eseguita alla fine del caricamento della pagina.
+//serve ad evitare che la pagina venga renderizzata prima dell'esecuzione degli script che attivano select2 e tinymce
+$(document).ready( function() {
+    $('.nuova_nota').fadeIn();
+});
+
+</script>
 {% endblock %}

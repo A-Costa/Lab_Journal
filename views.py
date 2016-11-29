@@ -13,7 +13,7 @@ def index():
 @app.route('/nota/<id_nota>')
 def nota(id_nota):
     n = Nota.query.filter(Nota.id == id_nota).first()
-    return render_template('nota.html', nota = n)
+    return render_template('nota.html', nota = n, tags=[t.tag for t in n.categorie.order_by(Categoria.tag)])
 
 @app.route('/new', methods=['GET', 'POST'])
 def new():
