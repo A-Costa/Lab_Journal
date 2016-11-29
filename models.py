@@ -35,8 +35,8 @@ class Categoria(db.Model):
 # Relazione molti a molti, definita come tabella e non come modello
 
 tags = db.Table('tags',
-    db.Column('tag_id', db.Integer, db.ForeignKey('categoria.id')),
-    db.Column('nota_id', db.Integer, db.ForeignKey('nota.id'))
+    db.Column('tag_id', db.Integer, db.ForeignKey('categoria.id'), primary_key=True),
+    db.Column('nota_id', db.Integer, db.ForeignKey('nota.id'), primary_key=True)
 )
 
 # >>> FORMS DECLARATION <<<

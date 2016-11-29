@@ -2,6 +2,8 @@ from Lab_Journal import app, db
 from Lab_Journal.models import Nota, Categoria, Nota_Form, Delete_Form
 from flask import render_template, request, redirect
 import datetime
+import code
+
 
 @app.route('/')
 def index():
@@ -52,7 +54,9 @@ def modify(id_nota):
     print nota_form.tags.default
 
     if delete_form.validate_on_submit():
-        return "DELETEEEE"
+        db.session.delete(n)
+        db.session.commit()
+        return redirect('/')
 
     if nota_form.validate_on_submit():
         categorie_db = [c.tag for c in Categoria.query.all()]
@@ -65,7 +69,9 @@ def modify(id_nota):
 
         n.titolo = nota_form.titolo.data
         n.testo = nota_form.testo.data
-
+        #svuoto le categorie per aggiornarle
+        print n.categorie.all()
+        n.categorie = []
         for c in categorie_ricevute:
             categoria = Categoria.query.filter(Categoria.tag == c).first()
             n.categorie.append(categoria)
