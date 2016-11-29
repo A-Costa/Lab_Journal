@@ -53,11 +53,25 @@ tinymce.init({
             {% endif %}
             </div>
         </div>
-        <div class="text-right">
-            <button type="submit" class="btn btn-default">Submit</button>
+        <div class="row bottoni">
+            <div class="col-xs-6">
+                {% if (modify==True) %}
+                    <button type="" class="btn btn-default" form="form_delete">Delete</button>
+                {% endif %}
+            </div>
+            <div class="col-xs-6 text-right">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
         </div>
     </form>
+    {% if(modify==True) %}
+        <form method="POST" id="form_delete">
+        {{ delete_form.csrf_token}}
+        {{ delete_form.id }}
+        </form>
+    {% endif %}
 </div>
+
 {% endblock %}
 {% block script %}
 <script>

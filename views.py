@@ -1,5 +1,5 @@
 from Lab_Journal import app, db
-from Lab_Journal.models import Nota, Categoria  , Nota_Form
+from Lab_Journal.models import Nota, Categoria, Nota_Form, Delete_Form
 from flask import render_template, request, redirect
 import datetime
 
@@ -45,10 +45,14 @@ def new():
 @app.route('/modify/<id_nota>', methods=['GET', 'POST'])
 def modify(id_nota):
     n = Nota.query.filter(Nota.id == id_nota).first()
-    nota_form = Nota_Form()
+    nota_form = Nota_Form(prefix = 'nota_')
     nota_form.tags.choices = [(c.tag, c.tag) for c in Categoria.query.order_by(Categoria.tag).all()]
+    delete_form = Delete_Form(prefix = 'delete_')
 
     print nota_form.tags.default
+
+    if delete_form.validate_on_submit():
+        return "DELETEEEE"
 
     if nota_form.validate_on_submit():
         categorie_db = [c.tag for c in Categoria.query.all()]
@@ -73,4 +77,6 @@ def modify(id_nota):
         nota_form.tags.data = [t.tag for t in n.categorie.all()]
         nota_form.testo.data = n.testo
         nota_form.titolo.data = n.titolo
-        return render_template('edit_note.html', nota_form = nota_form, errors = nota_form.errors, modify=True)
+
+        delete_form.id.data = id_nota
+        return render_template('edit_note.html', nota_form = nota_form, errors = nota_form.errors, modify=True, delete_form = delete_form)

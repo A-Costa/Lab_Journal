@@ -1,6 +1,6 @@
 from Lab_Journal import db
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectMultipleField
+from wtforms import StringField, TextAreaField, SelectMultipleField, HiddenField
 from wtforms.validators import DataRequired, Length
 import re
 
@@ -58,3 +58,6 @@ class Nota_Form(FlaskForm):
     titolo = StringField('titolo', validators=[DataRequired(), Length(max=64)])
     testo = TextAreaField('testo')
     tags = TagsSelectMultipleField('tags')
+
+class Delete_Form(FlaskForm):
+    id = HiddenField('id')
