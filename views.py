@@ -94,11 +94,11 @@ def search():
 
     if search_form.validate_on_submit():
         categorie_ricevute = search_form.tags.data
-        print categorie_ricevute
-        note = []
-        for c in categorie_ricevute:
-            #aggiungo alla lista note tutte le note collegate ad ogni categoria ricevuta, prendendole solo una volta
-            note += [n for n in Categoria.query.filter(Categoria.tag == c).first().note.all() if n not in note]
-        note =  sorted(note, key=lambda d: d.data, reverse=True)
+        #questa query recupera le note che contengono tra le proprie categorie almeno una categoria presente tra le categorie_ricevute
+        #la query puo essere interpretata cosi: "SELEZIONA le note per le quali ESISTE una join di nota e categoria DOVE la categoria e' presente categorie_ricevute"
+        note = Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute))).order_by(Nota.data.desc()).order_by(Nota.id.desc()).all()
+        print Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute)))
+        print "_"
+        print Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute))).order_by(Nota.data.desc()).order_by(Nota.id.desc())
         return render_template('list.html', note=note)
     return render_template('search.html', search_form=search_form)
