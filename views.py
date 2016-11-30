@@ -8,7 +8,7 @@ import code
 @app.route('/')
 def index():
     note = Nota.query.order_by(Nota.data.desc()).order_by(Nota.id.desc()).all()
-    return render_template('list.html', note = note)
+    return render_template('list.html', note = note, home=True)
 
 @app.route('/nota/<id_nota>')
 def nota(id_nota):
@@ -51,8 +51,6 @@ def modify(id_nota):
     nota_form.tags.choices = [(c.tag, c.tag) for c in Categoria.query.order_by(Categoria.tag).all()]
     delete_form = Delete_Form(prefix = 'delete_')
 
-    print nota_form.tags.default
-
     if delete_form.validate_on_submit():
         db.session.delete(n)
         db.session.commit()
@@ -70,7 +68,6 @@ def modify(id_nota):
         n.titolo = nota_form.titolo.data
         n.testo = nota_form.testo.data
         #svuoto le categorie per aggiornarle
-        print n.categorie.all()
         n.categorie = []
         for c in categorie_ricevute:
             categoria = Categoria.query.filter(Categoria.tag == c).first()
@@ -97,8 +94,5 @@ def search():
         #questa query recupera le note che contengono tra le proprie categorie almeno una categoria presente tra le categorie_ricevute
         #la query puo essere interpretata cosi: "SELEZIONA le note per le quali ESISTE una join di nota e categoria DOVE la categoria e' presente categorie_ricevute"
         note = Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute))).order_by(Nota.data.desc()).order_by(Nota.id.desc()).all()
-        print Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute)))
-        print "_"
-        print Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute))).order_by(Nota.data.desc()).order_by(Nota.id.desc())
         return render_template('list.html', note=note)
     return render_template('search.html', search_form=search_form)

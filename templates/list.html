@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block active_home %}
-class="active"
+    {% if home==True %}
+    class="active"
+    {% endif %}
 {% endblock %}
 
 {% block body %}
