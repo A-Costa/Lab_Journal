@@ -7,7 +7,7 @@ import code
 
 @app.route('/')
 def index():
-    note = Nota.query.all()
+    note = Nota.query.order_by(Nota.data.desc()).order_by(Nota.id.desc()).all()
     return render_template('list.html', note = note)
 
 @app.route('/nota/<id_nota>')
@@ -97,7 +97,8 @@ def search():
         print categorie_ricevute
         note = []
         for c in categorie_ricevute:
+            #aggiungo alla lista note tutte le note collegate ad ogni categoria ricevuta, prendendole solo una volta
             note += [n for n in Categoria.query.filter(Categoria.tag == c).first().note.all() if n not in note]
-        note =  sorted(note, key=lambda d: d.data)
+        note =  sorted(note, key=lambda d: d.data, reverse=True)
         return render_template('list.html', note=note)
     return render_template('search.html', search_form=search_form)
