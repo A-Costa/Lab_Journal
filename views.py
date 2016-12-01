@@ -2,24 +2,35 @@ from Lab_Journal import app, db, login_manager
 from Lab_Journal.models import Nota, Categoria, User, Nota_Form, Delete_Form, Search_Form, Login_Form
 from flask import render_template, request, redirect, session
 from flask_login import login_user, logout_user, current_user, login_required
-from datetime import timedelta
 import code
 
+#session.permanent rende le sessioni di tipo permanente, cioe scadranno in base al lifetime impostato
+#in __init__.py invece che alla chiusura del browser (che comunque non li avrebbe fatti chiudere....)
 @app.before_request
 def make_session_permanent():
     session.permanent = True
 
 @app.route('/')
-def index():
+def home():
+    if current_user.is_authenticated:
+        return redirect('/list')
+    else:
+        return redirect('/login')
+
+@app.route('/list')
+@login_required
+def list():
     note = Nota.query.order_by(Nota.data.desc()).order_by(Nota.id.desc()).all()
     return render_template('list.html', note = note, home=True)
 
 @app.route('/nota/<id_nota>')
+@login_required
 def nota(id_nota):
     n = Nota.query.filter(Nota.id == id_nota).first()
     return render_template('nota.html', nota = n, tags=[t.tag for t in n.categorie.order_by(Categoria.tag)])
 
 @app.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     nota_form = Nota_Form()
     #la prossima funzione setta dinamicamente le possibili scelte del campo tags (che e' un campo "SelectMultipleField")
@@ -49,6 +60,7 @@ def new():
         return render_template('edit_note.html', nota_form = nota_form, errors = nota_form.errors)
 
 @app.route('/modify/<id_nota>', methods=['GET', 'POST'])
+@login_required
 def modify(id_nota):
     n = Nota.query.filter(Nota.id == id_nota).first()
     nota_form = Nota_Form(prefix = 'nota_')
@@ -102,20 +114,23 @@ def search():
         return render_template('list.html', note=note)
     return render_template('search.html', search_form=search_form)
 
+#necessario per flask-login
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter(User.username == user_id).first()
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = Login_Form()
 
     if login_form.validate_on_submit():
-        a = User("alberto","123")
-        print a
-        if a:
-            login_user(a, remember=False)
-        print current_user
+        u = User.query.filter(User.username == login_form.username.data).first()
+        if u and u.check_password(login_form.password.data):
+            login_user(u, remember=False)
         return redirect('/')
     else:
         return render_template('login.html', login_form=login_form)

@@ -2,6 +2,7 @@ from Lab_Journal import db
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectMultipleField, HiddenField, PasswordField
 from wtforms.validators import DataRequired, Length
+from werkzeug.security import generate_password_hash, check_password_hash
 import re
 import code
 
@@ -42,15 +43,19 @@ tags = db.Table('tags',
 
 class User(db.Model):
     username = db.Column(db.String(64), primary_key=True)
-    password = db.Column(db.String(10), nullable=False)
+    hashed_password = db.Column(db.String(100), nullable=False)
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.hashed_password = generate_password_hash(password)
 
     def __repr__(self):
         return '<Login {}>'.format(self.username)
 
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)
+
+    #questi parametri e il metodo get_id sono richiesti da flask-login
     is_authenticated = True
     is_active = True
     is_anonymous = False
@@ -86,4 +91,4 @@ class Search_Form(FlaskForm):
 
 class Login_Form(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
