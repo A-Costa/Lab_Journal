@@ -1,6 +1,6 @@
 from Lab_Journal import db
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectMultipleField, HiddenField
+from wtforms import StringField, TextAreaField, SelectMultipleField, HiddenField, PasswordField
 from wtforms.validators import DataRequired, Length
 import re
 import code
@@ -40,6 +40,24 @@ tags = db.Table('tags',
     db.Column('nota_id', db.Integer, db.ForeignKey('nota.id'), primary_key=True)
 )
 
+class User(db.Model):
+    username = db.Column(db.String(64), primary_key=True)
+    password = db.Column(db.String(10), nullable=False)
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return '<Login {}>'.format(self.username)
+
+    is_authenticated = True
+    is_active = True
+    is_anonymous = False
+
+    def get_id(self):
+        return self.username
+
 # >>> FORMS DECLARATION <<<
 
 #la classe seguente eredita da SelectMultipleField e ne modifica il validatore.
@@ -65,3 +83,7 @@ class Delete_Form(FlaskForm):
 
 class Search_Form(FlaskForm):
     tags = TagsSelectMultipleField('tags', validators=[DataRequired()])
+
+class Login_Form(FlaskForm):
+    username = StringField('username', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired()])

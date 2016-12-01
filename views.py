@@ -1,9 +1,13 @@
-from Lab_Journal import app, db
-from Lab_Journal.models import Nota, Categoria, Nota_Form, Delete_Form, Search_Form
-from flask import render_template, request, redirect
-import datetime
+from Lab_Journal import app, db, login_manager
+from Lab_Journal.models import Nota, Categoria, User, Nota_Form, Delete_Form, Search_Form, Login_Form
+from flask import render_template, request, redirect, session
+from flask_login import login_user, logout_user, current_user, login_required
+from datetime import timedelta
 import code
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
 
 @app.route('/')
 def index():
@@ -85,6 +89,7 @@ def modify(id_nota):
         return render_template('edit_note.html', nota_form = nota_form, errors = nota_form.errors, modify=True, delete_form = delete_form)
 
 @app.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
     search_form=Search_Form()
     search_form.tags.choices = [(c.tag, c.tag) for c in Categoria.query.order_by(Categoria.tag).all()]
@@ -96,3 +101,26 @@ def search():
         note = Nota.query.filter(Nota.categorie.any(Categoria.tag.in_(categorie_ricevute))).order_by(Nota.data.desc()).order_by(Nota.id.desc()).all()
         return render_template('list.html', note=note)
     return render_template('search.html', search_form=search_form)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.username == user_id).first()
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    login_form = Login_Form()
+
+    if login_form.validate_on_submit():
+        a = User("alberto","123")
+        print a
+        if a:
+            login_user(a, remember=False)
+        print current_user
+        return redirect('/')
+    else:
+        return render_template('login.html', login_form=login_form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
