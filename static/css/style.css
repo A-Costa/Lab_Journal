@@ -1,0 +1,51 @@
+.header h3{
+    line-height: 40px;
+}
+.header .nav{
+    margin-top:20px;
+    margin-bottom:10px;
+}
+.header{
+    overflow: hidden;
+    padding-bottom: 10px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #e5e5e5;
+}
+@media (min-width: 768px){
+    .header .nav{
+        float: right!important;
+    }
+    .container{
+        max-width: 730px;
+    }
+}
+tr.clickable-row{
+    cursor: pointer;
+}
+
+.dettagli_nota h3{
+    margin-top: 0px;
+    margin-bottom: 40px;
+}
+.nuova_nota .form-horizontal .control-label{
+    padding-top: 7px;
+    margin-bottom: 0px;
+    text-align: right;
+}
+.nuova_nota .form-group{
+    margin-bottom: 40px;
+}
+.errore {
+    padding-top: 10px;
+    color: red;
+}
+.bottoni{
+    margin-top:20px;
+}
+.bootstrap-tagsinput {
+    width: 100% !important;
+}
+.categorie {
+    font-size: 12px;
+    color: #777777
+}
