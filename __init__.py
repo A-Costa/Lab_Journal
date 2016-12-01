@@ -6,7 +6,7 @@ from datetime import timedelta
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('config.py', silent=True)
 
-app.permanent_session_lifetime = timedelta(hours=1)
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 db = SQLAlchemy(app)
 
