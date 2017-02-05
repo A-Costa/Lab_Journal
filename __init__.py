@@ -16,5 +16,3 @@ login_manager.login_view = 'login'
 
 from Lab_Journal import views
 from Lab_Journal import models
-
-db.create_all()
