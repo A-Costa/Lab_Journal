@@ -2,7 +2,7 @@ from Lab_Journal import app, db, login_manager
 from Lab_Journal.models import Nota, Categoria, User, Nota_Form, Delete_Form, Search_Form, Login_Form
 from flask import render_template, request, redirect, session
 from flask_login import login_user, logout_user, current_user, login_required
-import code
+import datetime
 
 #session.permanent rende le sessioni di tipo permanente, cioe scadranno in base al lifetime impostato
 #in __init__.py invece che alla chiusura del browser (che comunque non li avrebbe fatti chiudere....)
